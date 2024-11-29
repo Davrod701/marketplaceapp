@@ -1,3 +1,5 @@
+import { opacity } from "react-native-reanimated/lib/typescript/Colors";
+
 const tintColorLight = '#2f95dc';
 const tintColorDark = '#fff';
 
@@ -8,12 +10,16 @@ export default {
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
+    opacityText: '#fff',
+    headerView: 'grey',
   },
   dark: {
     text: '#fff',
-    background: '#000',
+    background: '#0072c6c4',
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
+    opacityText: '#000',
+    headerView: '#151414',
   },
 };

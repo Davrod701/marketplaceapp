@@ -1,59 +1,51 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useState, useEffect } from 'react';
+import { useRouter, Stack } from 'expo-router';
+import { ThemeProvider, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { useColorScheme } from 'react-native';
+import useLocalStorage from '@/services/useLocalStorage';
 
-import { useColorScheme } from '@/components/useColorScheme';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
 
-export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
-};
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-    ...FontAwesome.font,
-  });
-
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-  useEffect(() => {
-    if (error) throw error;
-  }, [error]);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Esto debe ser manejado con lógica real
+  const colorScheme = useColorScheme();
+  const router = useRouter();
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    const timer = setTimeout(() => {
+      validarAutenticate();
+      if (isAuthenticated) {
+        router.push('/Home/HomeScreen');
+      } else {
+        router.push('/Login/LoginScreen');
+      }
+    }, 5000); // Retraso de 2 segundos
+
+    return () => clearTimeout(timer); 
+  }, [isAuthenticated]);
+
+ 
+
+
+  const { getUser, getToken} = useLocalStorage();
+
+
+  const validarAutenticate =  () => {
+    if (getUser() != null && getToken() != null) {
+      setIsAuthenticated(true);
     }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
   }
 
-  return <RootLayoutNav />;
-}
-
-function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+  <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme }>
+    <Stack>
+      {/* Definir la ruta predeterminada a la que quieres redirigir */}
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="Login/LoginScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="Register/RegisterScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="Home/HomeScreen" options={{ headerShown: false }} />
+    </Stack>
+  </ThemeProvider>
   );
 }
