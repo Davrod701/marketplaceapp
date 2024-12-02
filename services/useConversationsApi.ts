@@ -1,7 +1,6 @@
 import useLocalStorage from "@/services/useLocalStorage";
 
-// services/useConversationsApi.ts
-const API_URL = 'http://192.168.1.3:8000/api'; // Cambia la URL según tu API
+const { apiUrl } = require('../package.json');
 
 // Función para manejar las peticiones
 const useConversationsApi = () => {
@@ -13,7 +12,7 @@ const useConversationsApi = () => {
     console.log('getAllConversations');
     const token = await getToken();
     try {
-      const response = await fetch(`${API_URL}/chats?user_id=1`, {
+      const response = await fetch(`${apiUrl}/chats?user_id=1`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -46,7 +45,7 @@ const useConversationsApi = () => {
     console.log('createConversation');
     const token = await getToken();
     try {
-      const response = await fetch(`${API_URL}/chats`, {
+      const response = await fetch(`${apiUrl}/chats`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

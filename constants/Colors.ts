@@ -14,6 +14,7 @@ export default {
     headerView: 'grey',
     logout: 'red',
     productBackground: '#fff',
+    conversationCardBackground: '#f9f9f9'
   },
   dark: {
     text: '#fff',
@@ -25,5 +26,6 @@ export default {
     headerView: '#151414',
     logout: 'red',
     productBackground: '#000',
+    conversationCardBackground: '#000'
   },
 };

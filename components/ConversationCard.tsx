@@ -1,5 +1,7 @@
+import Colors from '@/constants/Colors';
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, useColorScheme, TouchableOpacity } from 'react-native';
 
 export interface ConversationCardProps {
   id: number;
@@ -8,10 +10,22 @@ export interface ConversationCardProps {
 }
 
 const ConversationCard = ({ id, product_id, productName }: ConversationCardProps) => {
+
+  const colorScheme = useColorScheme();
+  const currentTheme = Colors[colorScheme ?? 'light'];
+
+  const router = useRouter();
+
+  const navigateToChat = (idConversation: number) => {
+    router.push(`/Chat/ChatScreen?chatId=${idConversation}`);
+  }
+
   return (
-    <View style={styles.card}>
-      <Text style={styles.id}> Conversación ID: {id}</Text>
-      <Text style={styles.productName}> Producto: {productName}</Text>
+    <View style={[styles.card, {backgroundColor: currentTheme.conversationCardBackground, borderColor: currentTheme.text}]}>
+      <TouchableOpacity onPress={() => navigateToChat(id)}>
+      <Text style={[styles.id, {color: currentTheme.text}]}> {id}</Text>
+      <Text style={[styles.productName, {color: currentTheme.text}]}> Producto: {productName}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -22,16 +36,14 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: '#f9f9f9',
-    borderColor: '#ddd',
   },
   id: {
     fontWeight: 'bold',
     fontSize: 16,
   },
   productName: {
-    fontSize: 14,
-    color: '#555',
+    fontWeight: 'bold',
+    fontSize: 18,
   },
 });
 

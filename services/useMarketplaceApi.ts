@@ -1,6 +1,6 @@
 import useLocalStorage from "@/services/useLocalStorage";
 // services/useMarketplaceApi.ts
-const API_URL = 'http://192.168.1.3:8000/api'; // Cambia la URL según tu API
+const { apiUrl } = require('../package.json');
 
 // Función para manejar las peticiones
 const useMarketplaceApi = () => {
@@ -11,7 +11,7 @@ const useMarketplaceApi = () => {
   const login = async (email: string, password: string) => {
     console.log('login');
     try {
-      const response = await fetch(`${API_URL}/login`, {
+      const response = await fetch(`${apiUrl}/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ const useMarketplaceApi = () => {
     console.log('register');
     
     try {
-      const response = await fetch(`${API_URL}/register`, {
+      const response = await fetch(`${apiUrl}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const useMarketplaceApi = () => {
   const getAllProductos = async () => {
     console.log('getAllProductos');
     try {
-      const response = await fetch(`${API_URL}/productos`, {
+      const response = await fetch(`${apiUrl}/productos`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -111,7 +111,7 @@ const useMarketplaceApi = () => {
   const getProductoById = async (id: number) => {
     console.log('getProductoById');
     try {
-      const response = await fetch(`${API_URL}/productos/${id}`, {
+      const response = await fetch(`${apiUrl}/productos/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -142,7 +142,7 @@ const useMarketplaceApi = () => {
   const addProducto = async (nombre: string, precio: number, imagen: string, descripcion: string, estatus: number, user_id: number) => {
     console.log('addProducto');
     try {
-      const response = await fetch(`${API_URL}/productos`, {
+      const response = await fetch(`${apiUrl}/productos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ const useMarketplaceApi = () => {
   const updateProducto = async (id: number, nombre: string, precio: number, imagen: string, descripcion: string, estatus: number, user_id: number) => {
     console.log('updateProducto');
     try {
-      const response = await fetch(`${API_URL}/productos/${id}`, {
+      const response = await fetch(`${apiUrl}/productos/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -203,7 +203,7 @@ const useMarketplaceApi = () => {
     console.log('logout');
     const token = await getToken();
     try {
-      const response = await fetch(`${API_URL}/logout`, {
+      const response = await fetch(`${apiUrl}/logout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

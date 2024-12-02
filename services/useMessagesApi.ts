@@ -1,18 +1,22 @@
-// services/useMessagesApi.ts
-const API_URL = 'http://192.168.1.3:8000/api'; // Cambia la URL según tu API
+import useLocalStorage from "@/services/useLocalStorage";
+
+const { apiUrl } = require('../package.json');
 
 // Función para manejar las peticiones
 const useMessagesApi = () => {
 
+  const { getToken } = useLocalStorage();
+  
   // Función para obtener todos los mensajes de un chat
   const getMessagesByChatId = async (chatId: number) => {
+    const token = await getToken();
     console.log('getMessagesByChatId');
     try {
-      const response = await fetch(`${API_URL}/chats/${chatId}/messages`, {
+      const response = await fetch(`${apiUrl}/chats/${chatId}/messages`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`, // Usando el token para autenticación
+          'Authorization': `Bearer ${token}`, // Usando el token para autenticación
         },
       }); 
 
@@ -37,15 +41,19 @@ const useMessagesApi = () => {
   // Función para enviar un mensaje
   const sendMessage = async (chatId: number, user_id: number, message: string) => {
     console.log('sendMessage');
+    const token = await getToken();
+    
     try {
-      const response = await fetch(`${API_URL}/messages`, {
+      const response = await fetch(`${apiUrl}/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ chat_id: chatId, user_id, message }), // Datos del mensaje
+        body: JSON.stringify({  chat_id: chatId, sender_id: user_id, message }), // Datos del mensaje
       });
+      console.log(response);
+      
 
       if (!response.ok) {
         return { success: false, message: 'Error al enviar el mensaje' };
@@ -68,12 +76,13 @@ const useMessagesApi = () => {
   // Función para eliminar un mensaje
   const deleteMessage = async (messageId: number) => {
     console.log('deleteMessage');
+    const token = await getToken();
     try {
-      const response = await fetch(`${API_URL}/messages/${messageId}`, {
+      const response = await fetch(`${apiUrl}/messages/${messageId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Authorization': `Bearer ${token}`,
         },
       });
 

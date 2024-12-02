@@ -51,6 +51,7 @@ export default function RootLayout() {
       <Stack.Screen name="Home/HomeScreen" options={{ headerShown: false }} />
       <Stack.Screen name="Details/DetailScreen"         options={{title: 'Detalles' }} />
       <Stack.Screen name="Producto/AddProductScreen"         options={{title: 'Agregar Producto' }} />
+      <Stack.Screen name="Chat/ChatScreen"        options={{title: 'Chat' }} />
     </Stack>
   </ThemeProvider>
   );
