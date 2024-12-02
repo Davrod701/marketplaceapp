@@ -1,64 +1,67 @@
+import { useRouter } from 'expo-router';
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 // Definir los tipos para las props que recibe el componente
 interface ProductCardProps {
-    name: string;
-    description: string;
-    price: number;
-    image: string;
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
 }
 
-export default function ProductCard({ name, description, price, image }: ProductCardProps) {
-    return (
-        <View style={styles.card}>
-            <Image source={{ uri: image }} style={styles.image} />
-            <View style={styles.details}>
-                <Text style={styles.name}>{name}</Text>
-                <Text style={styles.description}>{description}</Text>
-                <Text style={styles.price}>${price}</Text>
-            </View>
+export default function ProductCard({ id, name, description, price, image }: ProductCardProps) {
+  const router = useRouter();
+
+  const navigateToDetail = (idProduct: number) => {
+    router.push(`/Details/DetailScreen?id=${idProduct}`); // Navega a la pantalla de detalle pasando el parámetro 'id'
+  };
+ 
+  return (
+    <View style={styles.card}>
+      {/* Aquí estamos usando una función anónima para evitar que se ejecute inmediatamente */}
+      <TouchableOpacity onPress={() => navigateToDetail(id)}>
+        <Image source={{ uri: image }} style={styles.image} onError={(error) => console.log('Image loading error:', error)} />
+        <View style={styles.details}>
+          <Text style={styles.name}>
+            {name} <Text style={styles.price}> ${price}</Text>
+          </Text>
+          <Text style={styles.description}>{description}</Text>
         </View>
-    );
+      </TouchableOpacity>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    card: {
-        flexDirection: 'row',
-        marginBottom: 20,
-        padding: 10,
-        borderWidth: 1,
-        borderRadius: 8,
-        borderColor: '#ddd',
-        backgroundColor: '#fff',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 2,
-    },
-    image: {
-        width: 80,
-        height: 80,
-        borderRadius: 8,
-        marginRight: 10,
-    },
-    details: {
-        flex: 1,
-        justifyContent: 'space-between',
-    },
-    name: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-    },
-    description: {
-        fontSize: 14,
-        color: '#666',
-    },
-    price: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#2a9d8f',
-    },
+  card: {
+    backgroundColor: '#efefef',
+    padding: 20,
+    marginVertical: 2,
+    marginHorizontal: 2,
+    width: '50%',
+  },
+  image: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
+    margin: 'auto',
+  },
+  details: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  description: {
+    fontSize: 14,
+    color: '#666',
+  },
+  price: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });

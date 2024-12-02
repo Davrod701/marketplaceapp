@@ -12,6 +12,8 @@ export default {
     tabIconSelected: tintColorLight,
     opacityText: '#fff',
     headerView: 'grey',
+    logout: 'red',
+    productBackground: '#fff',
   },
   dark: {
     text: '#fff',
@@ -21,5 +23,7 @@ export default {
     tabIconSelected: tintColorDark,
     opacityText: '#000',
     headerView: '#151414',
+    logout: 'red',
+    productBackground: '#000',
   },
 };

@@ -20,7 +20,7 @@ export default function RootLayout() {
       } else {
         router.push('/Login/LoginScreen');
       }
-    }, 5000); // Retraso de 2 segundos
+    }, 4000); // Retraso de 2 segundos
 
     return () => clearTimeout(timer); 
   }, [isAuthenticated]);
@@ -28,11 +28,15 @@ export default function RootLayout() {
  
 
 
-  const { getUser, getToken} = useLocalStorage();
+  const { getUser, getToken, clearStorage} = useLocalStorage();
 
 
-  const validarAutenticate =  () => {
-    if (getUser() != null && getToken() != null) {
+  const validarAutenticate =  async () => {
+
+    const user = await getUser();
+    const token = await getToken();
+
+    if (user != null &&  token != null) {
       setIsAuthenticated(true);
     }
   }
@@ -45,6 +49,8 @@ export default function RootLayout() {
       <Stack.Screen name="Login/LoginScreen" options={{ headerShown: false }} />
       <Stack.Screen name="Register/RegisterScreen" options={{ headerShown: false }} />
       <Stack.Screen name="Home/HomeScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="Details/DetailScreen"         options={{title: 'Detalles' }} />
+      <Stack.Screen name="Producto/AddProductScreen"         options={{title: 'Agregar Producto' }} />
     </Stack>
   </ThemeProvider>
   );

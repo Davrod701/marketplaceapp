@@ -1,10 +1,11 @@
+import useLocalStorage from "@/services/useLocalStorage";
 // services/useMarketplaceApi.ts
 const API_URL = 'http://192.168.1.3:8000/api'; // Cambia la URL según tu API
 
 // Función para manejar las peticiones
 const useMarketplaceApi = () => {
 
-  
+  const { getToken, clearStorage } = useLocalStorage();
   
   // Función para login
   const login = async (email: string, password: string) => {
@@ -24,7 +25,7 @@ const useMarketplaceApi = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       
       return {
         success: true,
@@ -52,9 +53,9 @@ const useMarketplaceApi = () => {
         body: JSON.stringify({ name, email, password, password_confirmation }),
       });
 
-      console.log('Response status:', response.status); // Ver el código de estado HTTP
+      //console.log('Response status:', response.status); // Ver el código de estado HTTP
       const data = await response.json();
-      console.log('Response data:', data); // Ver los datos que se reciben de la API
+      //console.log('Response data:', data); // Ver los datos que se reciben de la API
       
 
       if (!response.ok) {
@@ -68,13 +69,167 @@ const useMarketplaceApi = () => {
       };
 
     } catch (error) {
-      console.log(error);
+     // console.log(error);
       
       throw error;
     }
   };
 
-  return { login, register };
+
+
+  // Función para obtener todos los productos
+  const getAllProductos = async () => {
+    console.log('getAllProductos');
+    try {
+      const response = await fetch(`${API_URL}/productos`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        return { success: false, message: 'No se pudieron obtener los productos' };
+      }
+
+      const data = await response.json();
+      //console.log('Productos:', data);
+
+      return {
+        success: true,
+        data: data, // Lista de productos
+        message: 'Productos obtenidos exitosamente',
+      };
+    } catch (error) {
+      //console.log(error);
+      throw error;
+    }
+  };
+
+
+  // Función para obtener un producto por ID
+  const getProductoById = async (id: number) => {
+    console.log('getProductoById');
+    try {
+      const response = await fetch(`${API_URL}/productos/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        return { success: false, message: 'No se encontró el producto' };
+      }
+
+      const data = await response.json();
+      //console.log('Producto:', data);
+
+      return {
+        success: true,
+        data: data, // Producto específico
+        message: 'Producto obtenido exitosamente',
+      };
+    } catch (error) {
+      //console.log(error);
+      throw error;
+    }
+  };
+
+
+
+  // Función para agregar un producto
+  const addProducto = async (nombre: string, precio: number, imagen: string, descripcion: string, estatus: number, user_id: number) => {
+    console.log('addProducto');
+    try {
+      const response = await fetch(`${API_URL}/productos`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre, precio, imagen,descripcion, estatus, user_id }),
+      });
+
+      if (!response.ok) {
+        return { success: false, message: 'Error al agregar el producto' };
+      }
+
+      const data = await response.json();
+      //console.log('Producto agregado:', data);
+
+      return {
+        success: true,
+        data: data, // Producto creado
+        message: 'Producto agregado exitosamente',
+      };
+    } catch (error) {
+      //console.log(error);
+      throw error;
+    }
+  };
+
+
+  // Función para actualizar un producto
+  const updateProducto = async (id: number, nombre: string, precio: number, imagen: string, descripcion: string, estatus: number, user_id: number) => {
+    console.log('updateProducto');
+    try {
+      const response = await fetch(`${API_URL}/productos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nombre, precio, imagen, descripcion, estatus, user_id }),
+      });
+
+      if (!response.ok) {
+        return { success: false, message: 'Error al actualizar el producto' };
+      }
+
+      const data = await response.json();
+      //console.log('Producto actualizado:', data);
+
+      return {
+        success: true,
+        data: data, // Producto actualizado
+        message: 'Producto actualizado exitosamente',
+      };
+    } catch (error) {
+      //console.log(error);
+      throw error;
+    }
+  };
+
+  const logout = async () => {
+    console.log('logout');
+    const token = await getToken();
+    try {
+      const response = await fetch(`${API_URL}/logout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, // Asegúrate de enviar el token
+        },
+      });
+
+      if (!response.ok) {
+        //console.log('err al cerrar sesion');
+        
+        return { success: false, message: 'Error al cerrar sesión' };
+      }
+
+      clearStorage();
+
+      return {
+        success: true,
+        message: 'Sesión cerrada exitosamente',
+      };
+    } catch (error) {
+      //console.log(error);
+      throw error;
+    }
+  };
+
+  return { login, logout, register, getAllProductos, getProductoById, addProducto, updateProducto };
 };
 
 export default useMarketplaceApi;
