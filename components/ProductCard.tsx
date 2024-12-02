@@ -27,7 +27,7 @@ export default function ProductCard({ id, name, description, price, image }: Pro
           <Text style={styles.name}>
             {name} <Text style={styles.price}> ${price}</Text>
           </Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>Entra para ver</Text>
         </View>
       </TouchableOpacity>
     </View>
