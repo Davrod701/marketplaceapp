@@ -39,8 +39,10 @@ const useConversationsApi = () => {
     }
   };
 
+
+
   // Función para crear una nueva conversación
-  const createConversation = async (user_id: number, nombre: string) => {
+  const createConversation = async (product_id: number, user_owner_id: number,user_interested_id: number ) => {
     console.log('createConversation');
     const token = await getToken();
     try {
@@ -50,7 +52,7 @@ const useConversationsApi = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ user_id, nombre }), // Datos de la nueva conversación
+        body: JSON.stringify({product_id, user_owner_id, user_interested_id }), // Datos de la nueva conversación
       });
 
       if (!response.ok) {

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, useColorScheme, StyleSheet } from 'react-
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import ProductList from '@/components/ProductList';
-import ChatList from '@/components/ChatList';
+import ConversationList from '@/components/ConversationList';
 import Colors from '@/constants/Colors';
 import useMarketplaceApi from '@/services/useMarketplaceApi';
 
@@ -35,7 +35,7 @@ function Tab1Screen() {
 function Tab2Screen() {
   return (
     <View>
-      <ChatList />
+      <ConversationList />
     </View>
   );
 }

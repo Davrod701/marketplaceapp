@@ -91,7 +91,7 @@ export default function DetailScreen() {
           user_id={producto?.user_id ?? 0}  // Valor por defecto
         />
       ) : (
-        <ContactoCard id={producto?.user_id} name="Nombre del vendedor" />
+        <ContactoCard owner_id={producto?.user_id} product_id={producto?.id} name="Contactar al vendedor" />
       )}
     </View>
   );
