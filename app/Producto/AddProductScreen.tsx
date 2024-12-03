@@ -115,14 +115,14 @@ const AddProductScreen = () => {
       <Text style={[styles.title, { borderColor: currentTheme.text, color: currentTheme.text }]}>Agregar Producto</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: currentTheme.text, color: currentTheme.text }]}
         placeholder="Nombre del Producto"
         placeholderTextColor={currentTheme.text}
         value={nombre}
         onChangeText={setNombre}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: currentTheme.text, color: currentTheme.text }]}
         placeholder="Precio"
         placeholderTextColor={currentTheme.text}
         keyboardType="numeric"
@@ -130,7 +130,7 @@ const AddProductScreen = () => {
         onChangeText={setPrecio}
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { borderColor: currentTheme.text, color: currentTheme.text }]}
         placeholder="Descripción"
         placeholderTextColor={currentTheme.text}
         value={descripcion}
