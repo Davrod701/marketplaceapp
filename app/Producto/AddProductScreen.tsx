@@ -78,7 +78,7 @@ const AddProductScreen = () => {
     }
 
     setIsLoading(true);
-    fetchUserId();
+    await fetchUserId();
     
 
     try {
