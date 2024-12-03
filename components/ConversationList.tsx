@@ -5,6 +5,7 @@ import useConversationsApi from '@/services/useConversationsApi'; // Asegúrate 
 import useMarketplaceApi from '@/services/useMarketplaceApi'; // Asegúrate de que la ruta sea correcta
 import ConversationCard from '@/components/ConversationCard'; // Asumimos que tienes una tarjeta para mostrar las conversaciones
 import Colors from '@/constants/Colors';
+import useLocalStorage from '@/services/useLocalStorage';
 
 export interface Conversation {
   id: number;
@@ -21,13 +22,22 @@ export default function ConversationList() {
   const [loading, setLoading] = useState(true);
   const [productNames, setProductNames] = useState<Record<number, string>>({}); // Para almacenar los nombres de los productos
 
+  const [userId, setUserId] = useState<number>(0);
+  const { getUser } = useLocalStorage();
+
   const { getAllConversations } = useConversationsApi(); // Llamamos a la función del servicio
   const { getProductoById } = useMarketplaceApi(); // Llamamos al servicio para obtener los productos
 
+  const fetchUserId = async () => {
+    const userData = await getUser();
+    setUserId(userData?.id || 0);  // Asigna el ID del usuario
+  };
+
   // Función para obtener conversaciones de la API
   const fetchConversations = async () => {
+    fetchUserId();
     try {
-      const { success, data, message } = await getAllConversations(); // Usamos la función que ya creaste en useConversationsApi
+      const { success, data, message } = await getAllConversations(userId); // Usamos la función que ya creaste en useConversationsApi
       if (success) {
         setConversations(data); // Actualizamos el estado con las conversaciones obtenidas
         fetchProductNames(data); // Cargamos los nombres de los productos
