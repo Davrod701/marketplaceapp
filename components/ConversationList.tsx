@@ -35,7 +35,7 @@ export default function ConversationList() {
 
   // Función para obtener conversaciones de la API
   const fetchConversations = async () => {
-    fetchUserId();
+    await fetchUserId();
     try {
       const { success, data, message } = await getAllConversations(userId); // Usamos la función que ya creaste en useConversationsApi
       if (success) {

@@ -11,6 +11,8 @@ const useConversationsApi = () => {
   // Función para obtener todas las conversaciones
   const getAllConversations = async (idUser: number) => {
     console.log('getAllConversations');
+    console.log(idUser);
+    
     const token = await getToken();
     try {
       const response = await fetch(`${apiUrl}/chats?user_id=${idUser}`, {
