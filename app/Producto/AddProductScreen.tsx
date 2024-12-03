@@ -3,6 +3,7 @@ import { View, Text, TextInput, StyleSheet, Alert, Image, TouchableOpacity, useC
 import * as ImagePicker from 'expo-image-picker'; // Importamos ImagePicker
 import { useRouter } from 'expo-router';
 import useMarketplaceApi from '@/services/useMarketplaceApi'; // El servicio API
+import useLocalStorage from '@/services/useLocalStorage';
 import Colors from '@/constants/Colors';
 
 const AddProductScreen = () => {
@@ -12,6 +13,14 @@ const AddProductScreen = () => {
   const [imagenBase64, setImagenBase64] = useState<string | null>(null); // Inicializamos con null
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const { getUser } = useLocalStorage();
+  const [userId, setUserId] = useState<number>(0);
+
+  const fetchUserId = async () => {
+    const userData = await getUser();
+    setUserId(userData?.id || 0);  // Asigna el ID del usuario
+  };
 
   const colorScheme = useColorScheme();
   const currentTheme = Colors[colorScheme ?? 'light'];
@@ -69,9 +78,11 @@ const AddProductScreen = () => {
     }
 
     setIsLoading(true);
+    fetchUserId();
+    
 
     try {
-      const user_id = 1; // Ajusta el ID del usuario según sea necesario
+      const user_id = userId; // Ajusta el ID del usuario según sea necesario
       const response = await addProducto(
         nombre,
         parseFloat(precio),
