@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, Text, ActivityIndicator, useColorScheme } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native'; // Importar useFocusEffect
-import useConversationsApi from '@/services/useConversationsApi'; // Asegúrate de que la ruta sea correcta
-import useMarketplaceApi from '@/services/useMarketplaceApi'; // Asegúrate de que la ruta sea correcta
-import ConversationCard from '@/components/ConversationCard'; // Asumimos que tienes una tarjeta para mostrar las conversaciones
+import { useFocusEffect } from '@react-navigation/native'; 
+import useConversationsApi from '@/services/useConversationsApi'; 
+import useMarketplaceApi from '@/services/useMarketplaceApi'; 
+import ConversationCard from '@/components/ConversationCard'; 
 import Colors from '@/constants/Colors';
 import useLocalStorage from '@/services/useLocalStorage';
 
@@ -17,68 +17,77 @@ export interface Conversation {
 }
 
 export default function ConversationList() {
-  // Estado para almacenar las conversaciones y el estado de carga
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [loading, setLoading] = useState(true);
-  const [productNames, setProductNames] = useState<Record<number, string>>({}); // Para almacenar los nombres de los productos
-
+  const [productNames, setProductNames] = useState<Record<number, string>>({});
   const [userId, setUserId] = useState<number>(0);
-  const { getUser } = useLocalStorage();
 
-  const { getAllConversations } = useConversationsApi(); // Llamamos a la función del servicio
-  const { getProductoById } = useMarketplaceApi(); // Llamamos al servicio para obtener los productos
+  const { getUser } = useLocalStorage();
+  const { getAllConversations } = useConversationsApi(); 
+  const { getProductoById } = useMarketplaceApi(); 
 
   const fetchUserId = async () => {
     const userData = await getUser();
-    setUserId(userData?.id || 0);  // Asigna el ID del usuario
+    setUserId(userData?.id || 0);  
   };
 
-  // Función para obtener conversaciones de la API
   const fetchConversations = async () => {
-    await fetchUserId();
+    if (userId === 0) {
+      setLoading(false); 
+      return; // Si el userId es 0, no ejecutamos la carga de conversaciones
+    }
+
     try {
-      const { success, data, message } = await getAllConversations(userId); // Usamos la función que ya creaste en useConversationsApi
+      const { success, data, message } = await getAllConversations(userId);
       if (success) {
-        setConversations(data); // Actualizamos el estado con las conversaciones obtenidas
-        fetchProductNames(data); // Cargamos los nombres de los productos
+        setConversations(data);
+        fetchProductNames(data); 
       } else {
         console.log('Error al obtener las conversaciones:', message);
+        setLoading(false);
       }
     } catch (error) {
       console.log('Error al obtener las conversaciones:', error);
+      setLoading(false);
     } finally {
-      setLoading(false); // Deja de cargar cuando termine la solicitud
+      setLoading(false);
     }
   };
 
-  // Función para obtener los nombres de los productos por el id de cada conversación
   const fetchProductNames = async (conversations: Conversation[]) => {
-    const productNamesTemp: Record<number, string> = {}; // Usamos un objeto para almacenar los nombres de los productos
+    const productNamesTemp: Record<number, string> = {};
     for (const conversation of conversations) {
       try {
-        const { success, data } = await getProductoById(conversation.product_id); // Obtenemos el producto usando el product_id
+        const { success, data } = await getProductoById(conversation.product_id);
         if (success && data) {
-          productNamesTemp[conversation.id] = data.nombre; // Almacenamos el nombre del producto con el id de la conversación
+          productNamesTemp[conversation.id] = data.nombre; 
         }
       } catch (error) {
         console.log('Error al obtener el producto:', error);
       }
     }
-    setProductNames(productNamesTemp); // Actualizamos el estado con los nombres de los productos
+    setProductNames(productNamesTemp);
   };
 
-  // Usamos useFocusEffect para que se recarguen las conversaciones cada vez que el componente se enfoque
+  // Llamar a fetchConversations solo cuando userId cambie
+  useEffect(() => {
+    if (userId !== 0) {
+      fetchConversations(); // Llamamos a fetchConversations solo cuando el userId ha cambiado
+      setUserId(0);
+    }
+  }, [userId]);
+
+  // Usamos useFocusEffect para recargar las conversaciones cada vez que la pantalla se enfoque
   useFocusEffect(
     React.useCallback(() => {
-      setLoading(true); // Al enfocarse, iniciamos el indicador de carga
-      fetchConversations(); // Cargamos las conversaciones
-    }, []) // Solo lo ejecutamos una vez cuando se enfoque
+      fetchUserId();
+      setLoading(true); // Reestablecer el loading al enfocarse
+    }, []) // Solo cuando el componente se enfoque
   );
 
   const colorScheme = useColorScheme();
   const currentTheme = Colors[colorScheme ?? 'light'];
 
-  // Mostrar un indicador de carga mientras estamos esperando las conversaciones
   if (loading) {
     return (
       <View style={styles.loadingContainer}>

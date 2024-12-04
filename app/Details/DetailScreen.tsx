@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, useColorScheme, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, useColorScheme, ActivityIndicator, Image, ScrollView } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import Colors from '@/constants/Colors';
 import { useEffect, useState } from 'react';
@@ -66,34 +66,36 @@ export default function DetailScreen() {
   }
 
   return (
-    <View>
-      <Image
-        source={{ uri: producto?.imagen }}
-        style={styles.image}
-        onError={(error) => console.log('Image loading error:', error)}
-      />
-      <Text style={[styles.name, { color: currentTheme.text }]}>{producto?.nombre} </Text>
-      <Text style={[styles.price, { color: currentTheme.text }]}>${producto?.precio}</Text>
-      <Text style={[styles.description, styles.topSpace, { color: currentTheme.text }]}>Descripcion del producto:</Text>
-      <Text style={[styles.description, styles.bottomSpace, { color: currentTheme.text }]}>{producto?.descripcion}</Text>
-
-      {/* Condicional para mostrar el componente correspondiente */}
-      {producto?.user_id === userDataId ? (
-
-
-        <EditarCard
-          id={producto?.id}
-          nombre={producto?.nombre ?? 'Nombre no disponible'}  // Valor por defecto
-          precio={producto?.precio ?? 0}  // Valor por defecto
-          imagen={producto?.imagen ?? ''}  // Valor por defecto
-          descripcion={producto?.descripcion ?? 'Descripción no disponible'}  // Valor por defecto
-          estatus={producto?.estatus ?? 1}  // Valor por defecto
-          user_id={producto?.user_id ?? 0}  // Valor por defecto
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <View style={{ padding: 20 }}>
+        <Image
+          source={{ uri: producto?.imagen }}
+          style={styles.image}
+          onError={(error) => console.log('Image loading error:', error)}
         />
-      ) : (
-        <ContactoCard owner_id={producto?.user_id} product_id={producto?.id} name="Contactar al vendedor" />
-      )}
-    </View>
+        <Text style={[styles.name, { color: currentTheme.text }]}>{producto?.nombre} </Text>
+        <Text style={[styles.price, { color: currentTheme.text }]}>${producto?.precio}</Text>
+        <Text style={[styles.description, styles.topSpace, { color: currentTheme.text }]}>Descripcion del producto:</Text>
+        <Text style={[styles.description, styles.bottomSpace, { color: currentTheme.text }]}>{producto?.descripcion}</Text>
+
+        {/* Condicional para mostrar el componente correspondiente */}
+        {producto?.user_id === userDataId ? (
+
+
+          <EditarCard
+            id={producto?.id}
+            nombre={producto?.nombre ?? 'Nombre no disponible'}  // Valor por defecto
+            precio={producto?.precio ?? 0}  // Valor por defecto
+            imagen={producto?.imagen ?? ''}  // Valor por defecto
+            descripcion={producto?.descripcion ?? 'Descripción no disponible'}  // Valor por defecto
+            estatus={producto?.estatus ?? 1}  // Valor por defecto
+            user_id={producto?.user_id ?? 0}  // Valor por defecto
+          />
+        ) : (
+          <ContactoCard owner_id={producto?.user_id} product_id={producto?.id} name="Contactar al vendedor" />
+        )}
+      </View>
+    </ScrollView>
   );
 }
 

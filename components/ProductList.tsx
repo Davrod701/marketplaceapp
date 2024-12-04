@@ -24,9 +24,9 @@ export default function ProductList() {
   // Función para obtener productos de la API
   const fetchProductos = async () => {
     try {
-      const { success, data, message } = await getAllProductos(); // Usamos la función que ya creaste en useMarketplaceApi
+      const { success, data, message } = await getAllProductos(); 
       if (success) {
-        setProductos(data); // Actualizamos el estado con los productos obtenidos
+        setProductos(data); 
       } else {
         console.log('Error al obtener productos:', message);
       }
@@ -89,6 +89,7 @@ export default function ProductList() {
           />
         )}
         keyExtractor={(item) => item.id.toString()}
+        contentContainerStyle={{ paddingBottom: 220 }}
       />
     </View>
   );

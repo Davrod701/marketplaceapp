@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, Image, TouchableOpacity, useColorScheme } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'; // Importamos ImagePicker
 import { useRouter } from 'expo-router';
@@ -71,15 +71,22 @@ const AddProductScreen = () => {
     }
   };
 
+
+  useEffect(() => {
+    const getUserId = async () => {
+       await fetchUserId();
+    };
+
+    getUserId(); // Ejecutar la función asincrónica al cargar el componente
+  }, []);
+
   const handleSubmit = async () => {
     if (!nombre || !precio || !descripcion || !imagenBase64) {
       Alert.alert('Error', 'Por favor, completa todos los campos y selecciona una imagen.');
       return;
     }
 
-    setIsLoading(true);
-    await fetchUserId();
-    
+    setIsLoading(true);    
 
     try {
       const user_id = userId; // Ajusta el ID del usuario según sea necesario

@@ -13,14 +13,14 @@ export default function RootLayout() {
   const router = useRouter();
 
   useEffect(() => {
+    validarAutenticate();
     const timer = setTimeout(() => {
-      validarAutenticate();
       if (isAuthenticated) {
         router.push('/Home/HomeScreen');
       } else {
         router.push('/Login/LoginScreen');
       }
-    }, 4000); // Retraso de 2 segundos
+    }, 5000); // Retraso de 2 segundos
 
     return () => clearTimeout(timer); 
   }, [isAuthenticated]);
