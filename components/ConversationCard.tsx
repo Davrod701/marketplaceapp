@@ -23,7 +23,7 @@ const ConversationCard = ({ id, product_id, productName }: ConversationCardProps
   return (
     <View style={[styles.card, {backgroundColor: currentTheme.conversationCardBackground, borderColor: currentTheme.text}]}>
       <TouchableOpacity onPress={() => navigateToChat(id)}>
-      <Text style={[styles.id, {color: currentTheme.text}]}> {id}</Text>
+
       <Text style={[styles.productName, {color: currentTheme.text}]}> Producto: {productName}</Text>
       </TouchableOpacity>
     </View>
